@@ -3,8 +3,8 @@ import { useState } from "react";
 import { supabase } from "./supabaseClient";
 export default function ProductCard({ product }) {
   const [editing, setEditing] = useState(false);
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const [name, setName] = useState(product.name);
+  const [description, setDescription] = useState(product.description);
   function onSubmit() {
     console.log("name", name, "description", description);
     updateProduct();
