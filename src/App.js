@@ -11,15 +11,37 @@ import {
   Button,
 } from "react-bootstrap";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductCard from "./ProductCard";
+import { supabase } from "./supabaseClient";
 
 function App() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [products, setProducts] = useState([]);
 
   function onSubmit() {
     console.log("name", name, "description", description);
+  }
+
+  useEffect(() => {
+    getProducts();
+  }, []);
+
+  async function getProducts() {
+    try {
+      const { data, error } = await supabase
+        .from("products")
+        .select("*")
+        .limit(10);
+      if (error) throw error;
+      if (data != null) {
+        setProducts(data);
+      }
+    } catch (err) {
+      console.log(err);
+      alert(err.message);
+    }
   }
   return (
     <>
@@ -57,21 +79,14 @@ function App() {
         <hr></hr>
         <h3>Product List</h3>
         <Row xs={1} lg={3} className="g-4">
-          <Col>
-            <ProductCard />
-          </Col>
-          <Col>
-            <ProductCard />
-          </Col>
-          <Col>
-            <ProductCard />
-          </Col>
-          <Col>
-            <ProductCard />
-          </Col>
-          <Col>
-            <ProductCard />
-          </Col>
+          {products.map((x) => {
+            return (
+              <Col key={x.id}>
+                <ProductCard product={x} />
+              </Col>
+            );
+          })}
+          ;
         </Row>
       </Container>
     </>
