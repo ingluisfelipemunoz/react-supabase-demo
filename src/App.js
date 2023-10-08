@@ -22,6 +22,22 @@ function App() {
 
   function onSubmit() {
     console.log("name", name, "description", description);
+    createProduct();
+  }
+
+  async function createProduct(data) {
+    try {
+      const { data, error } = await supabase.from("products").insert({
+        name: name,
+        description: description,
+      });
+      if (error) throw error;
+      alert("Product Created");
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+      alert(err.message);
+    }
   }
 
   useEffect(() => {
