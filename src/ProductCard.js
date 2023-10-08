@@ -28,7 +28,20 @@ export default function ProductCard({ product }) {
     }
   }
 
-  async function deleteProduct() {}
+  async function deleteProduct() {
+    try {
+      const { data, error } = await supabase
+        .from("products")
+        .delete()
+        .eq("id", product.id);
+      if (error) throw error;
+      alert("Product Deleted");
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+      alert(err.message);
+    }
+  }
   return (
     <Card style={{ width: "18rem" }}>
       <Card.Body>
@@ -36,7 +49,9 @@ export default function ProductCard({ product }) {
           <>
             <Card.Title>{product.name}</Card.Title>
             <Card.Text>{product.description}</Card.Text>
-            <Button variant="danger">Delete</Button>
+            <Button onClick={deleteProduct} variant="danger">
+              Delete
+            </Button>
             <Button onClick={(e) => setEditing(true)} variant="secondary">
               Edit
             </Button>
