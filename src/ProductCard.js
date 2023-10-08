@@ -1,6 +1,6 @@
 import { Card, Button, Form } from "react-bootstrap";
 import { useState } from "react";
-export default function ProductCard() {
+export default function ProductCard({ product }) {
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -12,8 +12,8 @@ export default function ProductCard() {
       <Card.Body>
         {editing == false ? (
           <>
-            <Card.Title>Product Name</Card.Title>
-            <Card.Text>Product Description</Card.Text>
+            <Card.Title>{product.name}</Card.Title>
+            <Card.Text>{product.description}</Card.Text>
             <Button variant="danger">Delete</Button>
             <Button onClick={(e) => setEditing(true)} variant="secondary">
               Edit
@@ -25,6 +25,7 @@ export default function ProductCard() {
             <Form.Label>Product Name</Form.Label>
             <Form.Control
               onChange={(e) => setName(e.target.value)}
+              defaultValue={product.name}
               type="text"
               id="name"
             ></Form.Control>
@@ -33,6 +34,7 @@ export default function ProductCard() {
             <Form.Control
               onChange={(e) => setDescription(e.target.value)}
               type="text"
+              defaultValue={product.description}
               id="description"
             ></Form.Control>
             <br></br>
