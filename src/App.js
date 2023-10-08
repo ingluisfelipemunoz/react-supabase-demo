@@ -27,10 +27,13 @@ function App() {
 
   async function createProduct(data) {
     try {
-      const { data, error } = await supabase.from("products").insert({
-        name: name,
-        description: description,
-      });
+      const { data, error } = await supabase
+        .from("products")
+        .insert({
+          name: name,
+          description: description,
+        })
+        .single();
       if (error) throw error;
       alert("Product Created");
       window.location.reload();
