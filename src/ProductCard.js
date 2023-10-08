@@ -1,12 +1,34 @@
 import { Card, Button, Form } from "react-bootstrap";
 import { useState } from "react";
+import { supabase } from "./supabaseClient";
 export default function ProductCard({ product }) {
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   function onSubmit() {
     console.log("name", name, "description", description);
+    updateProduct();
   }
+
+  async function updateProduct() {
+    try {
+      const { data, error } = await supabase
+        .from("products")
+        .update({
+          name: name,
+          description: description,
+        })
+        .eq("id", product.id);
+      if (error) throw error;
+      alert("Product Updated");
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+      alert(err.message);
+    }
+  }
+
+  async function deleteProduct() {}
   return (
     <Card style={{ width: "18rem" }}>
       <Card.Body>
@@ -39,7 +61,9 @@ export default function ProductCard({ product }) {
             ></Form.Control>
             <br></br>
 
-            <Button onClick={onSubmit}>Create Product</Button>
+            <Button variant="success" onClick={onSubmit}>
+              Update Product
+            </Button>
             <hr></hr>
             <Button
               variant="warning"
